@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import "./Styles/styles.scss";
+// import store from "./redux/store/configureStore";
 
 import './style.scss';
 

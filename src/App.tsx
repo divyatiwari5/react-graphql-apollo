@@ -1,18 +1,20 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import HomePage from './Pages/HomePage';
+import SingleCharacter from './Pages/HomePage/CharacterCard/SingleCharacter';
 
 export default function App() {
 	return (
 		<BrowserRouter>
 			<Switch>
 				<Route path="/" exact>
-					Home Page
+					<HomePage/>
 				</Route>
 				<Route path="/page/:pageNumber" exact>
 					Page X
 				</Route>
 				<Route path="/profile/:characterId" exact>
-					Profile Page
+					<SingleCharacter/>
 				</Route>
 			</Switch>
 		</BrowserRouter>
