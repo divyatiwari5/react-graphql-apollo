@@ -1,13 +1,16 @@
-import { CardActionArea, CardActions, CardContent, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
+import { CardActionArea, CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import { Link, withRouter } from 'react-router-dom';
+import Search from '../../../../Components/Search';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-        height: 118,
-        width: 500
+        flexDirection: 'column',
+        width: 500,
+        margin: 'auto',
+        marginTop: 100
     },
     details: {
         display: 'flex',
@@ -15,12 +18,19 @@ const useStyles = makeStyles((theme) => ({
         width: '100%'
     },
     heading: {
-        display: 'flex',
-        justifyContent: 'space-between'
+        background: 'cadetblue'
     },
-    content: {
+    headingContent: {
         display: 'flex',
-        justifyContent: 'space-between',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginLeft: 40
+    },
+    mainHeading: {
+        fontSize: 30
+    },
+    subHeading: {
+        display: 'flex'
     },
     status: {
         display: 'block',
@@ -30,10 +40,18 @@ const useStyles = makeStyles((theme) => ({
         background: 'green'
     },
     cover: {
-        width: 151,
+        height: 120,
+        width: 120,
+        backgroundSize: 'contain',
+        borderRadius: 100
+    },
+    content: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        marginTop: 20
     },
     cardAction: {
-        alignSelf: 'flex-end'
+        boxShadow: '0px 0px 12px lightgrey',
     }
 
 }))
@@ -43,32 +61,77 @@ function SingleCharacter(props: any) {
     const classes = useStyles();
 
     function onClickHandle(){
-        console.log("call");
-        // props.history.push('/profile/2');
+        props.history.push('/');
     }
 
     return (
-        <Card className={classes.root}>
-            <CardMedia
-                className={classes.cover}
-                image="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
-            />
-            <div className={classes.details}>
-                <CardContent className={classes.content}>
-                    <Typography>
-                        Morty Smith
-                    </Typography>
-                    <div className={classes.status}>
-                    </div>
-                </CardContent>  
-                <CardActions className={classes.cardAction}>
-                    <IconButton onClick={() => onClickHandle()}>
-                        <ArrowForwardIosIcon/>
-                    </IconButton>
-                </CardActions>
-            </div>
+        <div>
+            <Search/>
+            <Card className={classes.root}>
+                <CardHeader
+                    className={classes.heading}
+                    avatar={
+                        <CardMedia
+                            className={classes.cover}
+                            image="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
+                        />
+                        }
+                    
+                    title={'Morty Smith'}
+                    subheader={'Alive'}
+                />
+                
+                <div className={classes.details}>
+                    <CardContent> 
+                        <div className={classes.content}>
+                            <span>
+                                <Typography component="h6" variant="h6">
+                                    Species
+                                </Typography>
+                                <Typography variant="subtitle1" color="textSecondary">
+                                    Human
+                                </Typography>
+                            </span>
+                            <span>
+                                <Typography component="h6" variant="h6">
+                                    Gender
+                                </Typography>
+                                <Typography variant="subtitle1" color="textSecondary">
+                                    Female
+                                </Typography>
+                            </span>
+                        </div>  
+                        <div className={classes.content}>
+                            <span>
+                                <Typography component="h6" variant="h6">
+                                    Type
+                                </Typography>
+                                <Typography variant="subtitle1" color="textSecondary">
+                                    -
+                                </Typography>
+                            </span>
+                            <span>
+                                <Typography component="h6" variant="h6">
+                                    Location
+                                </Typography>
+                                <Typography variant="subtitle1" color="textSecondary">
+                                    Earth
+                                </Typography>
+                            </span>
+                           
+                        </div>
+                        
+                    </CardContent>  
+                    <CardActions className={classes.cardAction}>
+                        <IconButton onClick={onClickHandle}>
+                            <ArrowBackIos/>
+                        </IconButton>
+                    </CardActions>
+                </div>
            
-        </Card>
+            </Card>
+        </div>
+        
     )
 }
 
