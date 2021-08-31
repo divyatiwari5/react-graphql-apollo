@@ -1,0 +1,33 @@
+.search-person {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    width: 90%;
+    margin: 24px;
+    &:hover, &:active, &:focus-visible {
+        border: 1px solid $lightish-blue;
+        cursor: pointer;
+        background: $lightish-grey;
+    }
+    &:active{
+        box-shadow: inset 1px 2px 3px $lightish-grey-two;
+    }
+    &:focus-visible {
+        outline: none;
+        box-shadow: inset 1px 2px 3px $lightish-grey-two;
+    }
+    & > svg {
+        height: 16px;
+    }
+    & > .search-input {
+        border: none;
+        background: transparent;
+        font-size: 14px;
+        margin-left: 15px;
+        &:focus-visible {
+            outline: none;
+        }
+    }
+}
