@@ -10,6 +10,9 @@ export default function App() {
 				<Route path="/" exact>
 					<HomePage/>
 				</Route>
+				<Route path="/search">
+					<HomePage/>
+				</Route>
 				<Route path="/page/:pageNumber" exact>
 					Page X
 				</Route>

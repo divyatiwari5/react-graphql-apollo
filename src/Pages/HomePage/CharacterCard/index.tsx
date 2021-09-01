@@ -33,8 +33,9 @@ const useStyles = makeStyles((theme) => ({
         height: 16,
         width: 16,
         position: 'absolute',
-        bottom: 5,
-        right: 0
+        bottom: 6,
+        right: 0,
+        border: '3px solid white'
     },
     alive: {
         background: 'green'
@@ -45,12 +46,11 @@ const useStyles = makeStyles((theme) => ({
     unknown: {
         background: 'grey'
     },
-    cover: {
+    profilePhoto: {
         height: 80,
         width: 80,
         backgroundSize: 'contain',
         borderRadius: 100,
-        border: '6px solid white'
     },
     cardAction: {
         alignSelf: 'flex-end'
@@ -64,8 +64,7 @@ function CharacterCard(props: any) {
     const theme = useTheme()
 
     function onClickHandle(){
-        console.log("call");
-        props.history.push('/profile/2');
+        props.history.push(`/profile/${props.id}`);
     }
 
     function getClassName(status: string) {
@@ -86,7 +85,7 @@ function CharacterCard(props: any) {
                     avatar={
                         <div className={classes.profileContainer}>
                             <CardMedia
-                                className={classes.cover}
+                                className={classes.profilePhoto}
                                 image={props.image}
                             />
                              <div className={getClassName(props.status)}></div>
@@ -96,10 +95,6 @@ function CharacterCard(props: any) {
                     
                     title={props.name}
             />
-            {/* <CardMedia
-                className={classes.cover}
-                image="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
-            /> */}
             <div className={classes.details}>
                 <CardContent className={classes.content}>
                    

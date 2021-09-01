@@ -1,10 +1,11 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { Grid, makeStyles } from "@material-ui/core";
+import { useState } from "react";
 import { useEffect } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import Search from "../../Components/Search";
 import CharacterCard from "./CharacterCard";
-// import { getCharacters } from "./redux/actions";
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -12,9 +13,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const GET_CHARACTERS = gql`
+export const GET_CHARACTERS = (searchString: any) => gql`
   query {
-      characters(page: 1) {
+      characters(page: 1, filter: { name: "${searchString}" }) {
     info {
       count
     }
@@ -28,23 +29,41 @@ export const GET_CHARACTERS = gql`
 }
 `
 
-function HomePage() {
+function HomePage(props: any) {
+
+    const query = new URLSearchParams(props.location.search);
+    const searchedString = query.get("q");
 
     const classes = useStyles();
 
+    const [ loadCharacters, {loading: loadingAllChars, error: AllCharsError, data: allChars} ]= useLazyQuery(GET_CHARACTERS(""));
+
+    const [results, setResults] = useState([])
+
+    const [ searchCharacters, { loading, error, data }] = useLazyQuery(GET_CHARACTERS(searchedString))
+
     useEffect(() => {
-        // props.getCharacters();
-    }, [])
+        if (!searchedString) return;
+        if (searchedString) searchCharacters();
+        if (data) {
+            setResults(data.characters.results);
+        }
+    }, [searchedString, data, searchCharacters])
 
-    const { loading, data, error } = useQuery(GET_CHARACTERS);
+    useEffect(() => {
+        if (!searchedString) {
+            loadCharacters();
+        }
+        if (allChars) {
+            setResults(allChars.characters.results);
+        }
+    }, [allChars, loadCharacters, searchedString])
 
-    if (loading) return <div>Loading....</div>
-    if (error) return <div>Error...</div>
+    if (loading || loadingAllChars) return <div>Loading....</div>
+    if (error || AllCharsError) return <div>Error...</div>
+    // if (!allChars) return <div>No data found!</div>
 
-    console.log({data});
-    if (data) {
-
-    }
+    // if (allChars && allChars?.characters?.results) finalResult = allChars.characters.results;
 
     return(        
         <div>
@@ -57,9 +76,10 @@ function HomePage() {
                     spacing={3} 
                     className={classes.gridContainer}
                 >
-                    {data.characters.results.map((value: any) => (
-                        <Grid item xs={6} key={value}>
+                    {results && results.map((value: any) => (
+                        <Grid item xs={6} key={value.id}>
                             <CharacterCard 
+                                id={value.id}
                                 name={value.name}
                                 image={value.image} 
                                 status={value.status}
@@ -74,12 +94,4 @@ function HomePage() {
     )
 }
 
-const mapStateToProps = (state: { characters: any; }) => {
-    const { characters } = state;
-
-    return { characters }
-}
-
-// export default connect(null, getCharacters)(HomePage)
-
-export default HomePage
+export default withRouter(HomePage)

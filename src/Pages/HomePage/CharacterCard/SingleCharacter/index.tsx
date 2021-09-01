@@ -1,3 +1,4 @@
+import { gql, useQuery } from '@apollo/client';
 import { CardActionArea, CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
@@ -39,6 +40,28 @@ const useStyles = makeStyles((theme) => ({
         width: 20,
         background: 'green'
     },
+    statusIcon: {
+        display: 'block',
+        borderRadius: 10,
+        height: 20,
+        width: 20,
+        position: 'absolute',
+        bottom: 10,
+        right: 6,
+        border: '3px solid white'
+    },
+    alive: {
+        background: 'green'
+    },
+    dead: {
+        background: 'red'
+    },
+    unknown: {
+        background: 'grey'
+    },
+    profileContainer: {
+        position: 'relative'
+    },
     cover: {
         height: 120,
         width: 120,
@@ -56,13 +79,54 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
+export const GET_CHARACTER_DETAILS = (characterId: number) => gql`
+    query {
+        charactersByIds( ids: ${characterId}) {
+            name,
+            id,
+            status,
+            species,
+            image,
+            type,
+            gender,
+            location {
+            name
+            }
+        }
+    }
+`
+
 function SingleCharacter(props: any) {
 
     const classes = useStyles();
 
+    const characterId = props.match.params.characterId;
+
+    const { loading, data, error } = useQuery(GET_CHARACTER_DETAILS(characterId));
+
     function onClickHandle(){
         props.history.push('/');
     }
+
+    function getClassName(status: string) {
+        let className = classes.statusIcon + ' ';
+        if(status === "Alive") {
+            return className += classes.alive
+        } else if(status === "Dead") {
+            return className += classes.dead
+        } else if(status === "unknown") {
+            return className += classes.unknown
+        }
+    }
+
+
+    let detailedData;
+
+    if (loading) return <div>Loading Details...</div>
+    if (error) return <div>Error...</div>
+    if (data) detailedData = data.charactersByIds[0];
+    if (!detailedData) return <div>No data found</div>
+
 
     return (
         <div>
@@ -71,14 +135,19 @@ function SingleCharacter(props: any) {
                 <CardHeader
                     className={classes.heading}
                     avatar={
-                        <CardMedia
-                            className={classes.cover}
-                            image="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
-                        />
+                        <div className={classes.profileContainer}>
+                            <CardMedia
+                                className={classes.cover}
+                                image={detailedData.image}
+                            />
+                            <div className={getClassName(detailedData.status)}></div>
+
+                        </div>
+                        
                         }
                     
-                    title={'Morty Smith'}
-                    subheader={'Alive'}
+                    title={detailedData.name}
+                    subheader={detailedData.status}
                 />
                 
                 <div className={classes.details}>
@@ -89,7 +158,7 @@ function SingleCharacter(props: any) {
                                     Species
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary">
-                                    Human
+                                    {detailedData.species}
                                 </Typography>
                             </span>
                             <span>
@@ -97,7 +166,7 @@ function SingleCharacter(props: any) {
                                     Gender
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary">
-                                    Female
+                                    {detailedData.gender}
                                 </Typography>
                             </span>
                         </div>  
@@ -107,7 +176,7 @@ function SingleCharacter(props: any) {
                                     Type
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary">
-                                    -
+                                    {detailedData.type}
                                 </Typography>
                             </span>
                             <span>
@@ -115,7 +184,7 @@ function SingleCharacter(props: any) {
                                     Location
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary">
-                                    Earth
+                                    {detailedData.location.name}
                                 </Typography>
                             </span>
                            
