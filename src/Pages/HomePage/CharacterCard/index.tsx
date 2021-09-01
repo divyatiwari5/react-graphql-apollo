@@ -32,10 +32,18 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 10,
         height: 16,
         width: 16,
-        background: 'green',
         position: 'absolute',
         bottom: 5,
         right: 0
+    },
+    alive: {
+        background: 'green'
+    },
+    dead: {
+        background: 'red'
+    },
+    unknown: {
+        background: 'grey'
     },
     cover: {
         height: 80,
@@ -59,6 +67,18 @@ function CharacterCard(props: any) {
         console.log("call");
         props.history.push('/profile/2');
     }
+
+    function getClassName(status: string) {
+        let className = classes.status + ' ';
+        if(status === "Alive") {
+            return className += classes.alive
+        } else if(status === "Dead") {
+            return className += classes.dead
+        } else if(status === "unknown") {
+            return className += classes.unknown
+        }
+    }
+
     return (
         <Card className={classes.root}>
             <CardHeader
@@ -67,14 +87,14 @@ function CharacterCard(props: any) {
                         <div className={classes.profileContainer}>
                             <CardMedia
                                 className={classes.cover}
-                                image="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
+                                image={props.image}
                             />
-                             <div className={classes.status}></div>
+                             <div className={getClassName(props.status)}></div>
                         </div>
                         
                         }
                     
-                    title={'Morty Smith'}
+                    title={props.name}
             />
             {/* <CardMedia
                 className={classes.cover}

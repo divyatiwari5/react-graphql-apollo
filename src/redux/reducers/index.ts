@@ -9,7 +9,7 @@ const client = new ApolloClient({
 
 const combinedReducers = combineReducers({
   characterReducer: characterReducer,
-  apollo: client.reducer()
+  // apollo: client.reducer()
 })
 
 export default combinedReducers
