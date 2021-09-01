@@ -11,10 +11,10 @@ const isDev = process.env.NODE_ENV === 'development';
 //   middlewares.push(logger);
 // }
 
-// const finalCreateStore = compose(applyMiddleware(...middlewares))(createStore);
+const finalCreateStore = compose(applyMiddleware(...middlewares))(createStore);
 
-// const Store = finalCreateStore(Reducers);
+const Store = finalCreateStore(Reducers);
 
-// export type RootState = ReturnType<typeof Store.getState>
+export type RootState = ReturnType<typeof Store.getState>
 
-// export default Store;
+export default Store;
