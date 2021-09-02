@@ -2,8 +2,7 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import { Grid, makeStyles } from "@material-ui/core";
 import { useState } from "react";
 import { useEffect } from "react";
-import { withRouter } from "react-router-dom";
-import Search from "../../Components/Search";
+import { useHistory, useParams } from "react-router-dom";
 import CharacterCard from "./CharacterCard";
 import Pagination from '@material-ui/lab/Pagination';
 import { GET_CHARACTERS } from "../../GQueries";
@@ -21,12 +20,16 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+interface ParamTypes {
+    pageNumber: string
+}
 
-function HomePage(props: any) {
+function HomePage() {
+    const history = useHistory();
 
-    const query = new URLSearchParams(props.location.search);
+    const query = new URLSearchParams(history.location.search);
     const searchedString = query.get("q");
-    const pageParam = parseInt(props.match.params.pageNumber);
+    const { pageNumber: pageParam } = useParams<ParamTypes>();
 
     const classes = useStyles();
     const [page, setPage] = useState(1);
@@ -39,7 +42,7 @@ function HomePage(props: any) {
     const [ searchCharacters, { loading, error, data }] = useLazyQuery(GET_CHARACTERS(page, searchedString ? searchedString : ""))
 
     useEffect(() => {
-        setPage(pageParam);
+        setPage(parseInt(pageParam));
     }, [pageParam])
 
     useEffect(() => {
@@ -69,8 +72,8 @@ function HomePage(props: any) {
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
-        if (searchedString) props.history.push(`/page/${value}/search?q=${searchedString}`)
-        else props.history.push(`/page/${value}`)
+        if (searchedString) history.push(`/page/${value}/search?q=${searchedString}`)
+        else history.push(`/page/${value}`)
     }
 
     return(        
@@ -113,4 +116,4 @@ function HomePage(props: any) {
     )
 }
 
-export default withRouter(HomePage)
+export default HomePage

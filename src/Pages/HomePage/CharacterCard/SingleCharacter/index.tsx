@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import { CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
-import { Link, withRouter } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Header from '../../../../Components/Header';
 import { GET_CHARACTER_DETAILS } from '../../../../GQueries';
 
@@ -84,18 +84,21 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
+interface ParamTypes {
+    characterId: string
+}
 
-
-function SingleCharacter(props: any) {
+function SingleCharacter() {
 
     const classes = useStyles();
+    const history = useHistory();
 
-    const characterId = props.match.params.characterId;
+    let { characterId } = useParams<ParamTypes>();
 
-    const { loading, data, error } = useQuery(GET_CHARACTER_DETAILS(characterId));
+    const { loading, data, error } = useQuery(GET_CHARACTER_DETAILS(parseInt(characterId)));
 
     function onClickHandle(){
-        props.history.push('/');
+        history.push("/");
     }
 
     function getClassName(status: string) {
@@ -194,4 +197,4 @@ function SingleCharacter(props: any) {
     )
 }
 
-export default withRouter(SingleCharacter)
+export default SingleCharacter

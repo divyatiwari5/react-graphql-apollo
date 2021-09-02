@@ -1,7 +1,7 @@
 import { CardActionArea, CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -63,9 +63,10 @@ function CharacterCard(props: any) {
 
     const classes = useStyles();
     const theme = useTheme()
+    const history = useHistory();
 
     function onClickHandle(){
-        props.history.push(`/profile/${props.id}`);
+        history.push(`/profile/${props.id}`);
     }
 
     function getClassName(status: string) {
@@ -106,4 +107,4 @@ function CharacterCard(props: any) {
     )
 }
 
-export default withRouter(CharacterCard)
+export default CharacterCard
