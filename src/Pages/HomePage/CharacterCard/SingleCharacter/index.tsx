@@ -1,9 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
-import { CardActionArea, CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
+import { CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import { Link, withRouter } from 'react-router-dom';
-import Search from '../../../../Components/Search';
+import Header from '../../../../Components/Header';
+import { GET_CHARACTER_DETAILS } from '../../../../GQueries';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -75,26 +76,15 @@ const useStyles = makeStyles((theme) => ({
     },
     cardAction: {
         boxShadow: '0px 0px 12px lightgrey',
+    },
+    tooLong: {
+        wordSpacing: 30,
+        width: 60
     }
 
 }))
 
-export const GET_CHARACTER_DETAILS = (characterId: number) => gql`
-    query {
-        charactersByIds( ids: ${characterId}) {
-            name,
-            id,
-            status,
-            species,
-            image,
-            type,
-            gender,
-            location {
-            name
-            }
-        }
-    }
-`
+
 
 function SingleCharacter(props: any) {
 
@@ -130,7 +120,7 @@ function SingleCharacter(props: any) {
 
     return (
         <div>
-            <Search/>
+            <Header/>
             <Card className={classes.root}>
                 <CardHeader
                     className={classes.heading}
@@ -179,11 +169,11 @@ function SingleCharacter(props: any) {
                                     {detailedData.type}
                                 </Typography>
                             </span>
-                            <span>
+                            <span className={classes.tooLong}>
                                 <Typography component="h6" variant="h6">
                                     Location
                                 </Typography>
-                                <Typography variant="subtitle1" color="textSecondary">
+                                <Typography variant="subtitle1" color="textSecondary" >
                                     {detailedData.location.name}
                                 </Typography>
                             </span>

@@ -1,12 +1,13 @@
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { Grid, makeStyles } from "@material-ui/core";
 import { useState } from "react";
 import { useEffect } from "react";
-import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Search from "../../Components/Search";
 import CharacterCard from "./CharacterCard";
 import Pagination from '@material-ui/lab/Pagination';
+import { GET_CHARACTERS } from "../../GQueries";
+import Header from "../../Components/Header";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,29 +21,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const GET_CHARACTERS = (page = 1, searchString: any) => gql`
-  query {
-      characters(page: ${page}, filter: { name: "${searchString}" }) {
-    info {
-      count,
-      pages,
-      next,
-      prev
-    }
-    results {
-        name
-        id
-        image
-        status
-    }
-  }
-}
-`
 
 function HomePage(props: any) {
 
     const query = new URLSearchParams(props.location.search);
     const searchedString = query.get("q");
+    const pageParam = parseInt(props.match.params.pageNumber);
 
     const classes = useStyles();
     const [page, setPage] = useState(1);
@@ -52,7 +36,11 @@ function HomePage(props: any) {
 
     const [pageInfo, setPageInfo] = useState({count: 0, pages: 0, next: 0, prev: 0})
 
-    const [ searchCharacters, { loading, error, data }] = useLazyQuery(GET_CHARACTERS(page, searchedString))
+    const [ searchCharacters, { loading, error, data }] = useLazyQuery(GET_CHARACTERS(page, searchedString ? searchedString : ""))
+
+    useEffect(() => {
+        setPage(pageParam);
+    }, [pageParam])
 
     useEffect(() => {
         if (!searchedString) return;
@@ -71,7 +59,6 @@ function HomePage(props: any) {
             setResults(allChars.characters.results);
             setPageInfo(allChars.characters.info);
         }
-        console.log({page});
     }, [allChars, loadCharacters, searchedString, page])
 
     if (loading || loadingAllChars) return <div>Loading....</div>
@@ -80,16 +67,15 @@ function HomePage(props: any) {
 
     // if (allChars && allChars?.characters?.results) finalResult = allChars.characters.results;
 
-    // TODO: Handle pagination when user come back from character detail page
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
+        if (searchedString) props.history.push(`/page/${value}/search?q=${searchedString}`)
+        else props.history.push(`/page/${value}`)
     }
-    
 
     return(        
         <div>
-            <Search/>
-            
+            <Header/>
             <Grid container spacing={1}>
                 <Grid 
                     container 
@@ -112,7 +98,8 @@ function HomePage(props: any) {
 
             {pageInfo && 
                 <Pagination 
-                    defaultPage={page}
+                    defaultPage={1}
+                    page={page}
                     count={pageInfo['pages']}
                     variant="outlined"
                     shape="rounded"

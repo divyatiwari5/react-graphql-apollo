@@ -4,10 +4,11 @@
     align-items: center;
     border: 1px solid transparent;
     border-radius: 20px;
-    width: 90%;
+    width: 30%;
     margin: 24px;
     border: 1px solid $lightish-blue;
     background: $lightish-grey;
+    position: relative;
     &:hover, &:active, &:focus-visible {
         cursor: pointer;
     }
@@ -29,5 +30,10 @@
         &:focus-visible {
             outline: none;
         }
+    }
+    & > a {
+        position: absolute;
+        right: 0;
+        text-decoration: none;
     }
 }

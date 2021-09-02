@@ -1,11 +1,9 @@
 import SearchIcon from '@material-ui/icons/Search';
 import React, { useState } from 'react';
 import * as _ from "lodash";
-import { useQuery } from '@apollo/client';
-import { GET_CHARACTERS } from '../../Pages/HomePage';
 import { useEffect } from 'react';
 import { Button } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 function Search(props: any) {
 
@@ -22,10 +20,6 @@ function Search(props: any) {
         setSearchString(event.target.value)
     }
 
-    const handleSearchClick = () => {
-        props.history.push(`/search?q=${searchString}`)
-    }
-
     return(
         <div className="search-person">
             <SearchIcon/>
@@ -35,7 +29,9 @@ function Search(props: any) {
                 value={searchString}
                 onChange={(event) => handleOnChange(event)}
             />
-            <Button variant="contained" color="primary" onClick={handleSearchClick}>Search</Button>
+            <Link to={`/page/1/search?q=${searchString}`}>
+                <Button variant="contained" color="primary">Search</Button>
+            </Link>
         </div>
     )
 }

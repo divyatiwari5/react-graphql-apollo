@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         height: 118,
         width: 500,
-        background: 'aliceblue'
+        background: 'aliceblue',
+        justifyContent: 'space-between'
     },
     details: {
         display: 'flex',
@@ -95,16 +96,11 @@ function CharacterCard(props: any) {
                     
                     title={props.name}
             />
-            <div className={classes.details}>
-                <CardContent className={classes.content}>
-                   
-                </CardContent>  
-                <CardActions className={classes.cardAction}>
-                    <IconButton onClick={onClickHandle}>
-                        <ArrowForwardIosIcon/>
-                    </IconButton>
-                </CardActions>
-            </div>
+            <CardActions className={classes.cardAction}>
+                <IconButton onClick={onClickHandle}>
+                    <ArrowForwardIosIcon/>
+                </IconButton>
+            </CardActions>
            
         </Card>
     )
