@@ -1,5 +1,11 @@
 import { gql } from "@apollo/client";
 
+/**
+ * List all characters that satisfy the criteria with pagination
+ * @param page : page number, default value is 1
+ * @param searchString default is empty string 
+ * @returns 
+ */
 export const GET_CHARACTERS = (page = 1, searchString = "") => gql`
   query {
       characters(page: ${page}, filter: { name: "${searchString}" }) {
@@ -19,6 +25,11 @@ export const GET_CHARACTERS = (page = 1, searchString = "") => gql`
 }
 `
 
+/**
+ * Get details of a character
+ * @param characterId: ID of character
+ * @returns 
+ */
 export const GET_CHARACTER_DETAILS = (characterId: number) => gql`
     query {
         charactersByIds( ids: ${characterId}) {
