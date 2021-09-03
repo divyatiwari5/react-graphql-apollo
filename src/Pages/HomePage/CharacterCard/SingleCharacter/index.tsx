@@ -1,5 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
-import { CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
+import { useQuery } from '@apollo/client';
+import { CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import { useHistory, useParams } from 'react-router-dom';
@@ -88,26 +88,31 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface ParamTypes {
-    characterId: string
-}
-
 function SingleCharacter() {
 
     const classes = useStyles();
     const history = useHistory();
 
-    let { characterId } = useParams<{characterId: string}>();
+    let { slug } = useParams<{slug: string}>();
+
+    const characterId = slug.split("-")[0];
+
+    /**
+     * Calling GET_CHARACTER_DETAILS Query to get the character detail
+     */
     const { loading, error, data  } = useQuery(
         GET_CHARACTER_DETAILS, { variables: { characterId: parseInt(characterId)}}
     );
-
-    console.log({characterId}, {loading}, {error}, {data});
 
     function onClickHandle(){
         history.push("/");
     }
 
+    /**
+     * Returns className on the basis of character's status
+     * @param {string} status: character's status
+     * @returns className
+     */
     function getClassName(status: string) {
         let className = classes.statusIcon + ' ';
         if(status === "Alive") {
@@ -121,7 +126,6 @@ function SingleCharacter() {
 
 
     let detailedData;
-
 
     if (loading) return <div className={classes.loading}>Loading Details...</div>
     if (error) return <NotFound message="Some error occurred!"/>
@@ -142,15 +146,11 @@ function SingleCharacter() {
                                 image={detailedData.image}
                             />
                             <div className={getClassName(detailedData.status)}></div>
-
                         </div>
-                        
                         }
-                    
                     title={detailedData.name}
                     subheader={detailedData.status}
                 />
-                
                 <div className={classes.details}>
                     <CardContent> 
                         <div className={classes.content}>
@@ -188,9 +188,7 @@ function SingleCharacter() {
                                     {detailedData.location.name}
                                 </Typography>
                             </span>
-                           
                         </div>
-                        
                     </CardContent>  
                     <CardActions className={classes.cardAction}>
                         <IconButton onClick={onClickHandle}>
@@ -198,10 +196,8 @@ function SingleCharacter() {
                         </IconButton>
                     </CardActions>
                 </div>
-           
             </Card>
-        </div>
-        
+        </div>   
     )
 }
 

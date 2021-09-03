@@ -1,3 +1,6 @@
+/**
+ * Header contains search bar and link to the home page
+ */
 import { makeStyles, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Search from "../Search";

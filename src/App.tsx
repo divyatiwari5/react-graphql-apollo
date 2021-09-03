@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import SingleCharacter from './Pages/HomePage/CharacterCard/SingleCharacter';
@@ -10,7 +9,7 @@ export default function App() {
 				<Route path="/page/:pageNumber">
 					<HomePage/>
 				</Route>
-				<Route path="/profile/:characterId" exact>
+				<Route path="/profile/:slug">
 					<SingleCharacter/>
 				</Route>
 				<Route path="/">

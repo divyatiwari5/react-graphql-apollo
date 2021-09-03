@@ -20,7 +20,7 @@ export const GET_CHARACTERS = (page = 1, searchString = "") => gql`
         id
         image
         status
-    }
+      }
   }
 }
 `

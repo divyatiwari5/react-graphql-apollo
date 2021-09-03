@@ -1,7 +1,7 @@
-import { CardActionArea, CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography, useTheme } from '@material-ui/core';
+import { CardActions, CardHeader, CardMedia, IconButton, makeStyles } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { useHistory, withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -62,13 +62,23 @@ const useStyles = makeStyles((theme) => ({
 function CharacterCard(props: any) {
 
     const classes = useStyles();
-    const theme = useTheme()
     const history = useHistory();
 
-    function onClickHandle(){
-        history.push(`/profile/${props.id}`);
+    /**
+     * Redirects user to character detail page
+     */
+    function onForwardClickHandle(){
+        const { name, id } = props;
+        const splittedName = name.toLowerCase().split(" ");
+        const slug = id + "-" + splittedName.join("-");
+        history.push(`/profile/${slug}`);
     }
 
+    /**
+     * Returns className on the basis of character's status
+     * @param {string} status: Character's status
+     * @returns classname
+     */
     function getClassName(status: string) {
         let className = classes.status + ' ';
         if(status === "Alive") {
@@ -96,7 +106,7 @@ function CharacterCard(props: any) {
                     title={props.name}
             />
             <CardActions className={classes.cardAction}>
-                <IconButton onClick={onClickHandle}>
+                <IconButton onClick={onForwardClickHandle}>
                     <ArrowForwardIosIcon/>
                 </IconButton>
             </CardActions>

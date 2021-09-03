@@ -1,3 +1,7 @@
+/**
+ * Call this component in case of Error or when there is no data
+ */
+
 import { Typography } from "@material-ui/core";
 import Header from "../Header";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';

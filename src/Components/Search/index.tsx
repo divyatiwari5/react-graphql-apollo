@@ -1,3 +1,6 @@
+/**
+ * Search component enables character searching
+ */
 import SearchIcon from '@material-ui/icons/Search';
 import React, { useState } from 'react';
 import * as _ from "lodash";
@@ -17,10 +20,18 @@ function Search(props: any) {
         if(searchedString) setSearchString(searchedString);
     }, [])
 
+    /**
+     * set input value on change of search input value
+     * @param event: Event
+     */
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchString(event.target.value)
     }
 
+    /**
+     * Enable search on Enter key press
+     * @param event: Keyboard event
+     */
     const handleKeyPress = (event: React.KeyboardEvent) => {
         if (event.key === "Enter") {
             history.push(`/page/1/search?q=${searchString}`)

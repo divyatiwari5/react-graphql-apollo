@@ -51,10 +51,16 @@ function HomePage() {
 
     const [ searchCharacters, { loading, error, data }] = useLazyQuery(GET_CHARACTERS(page, searchedString ? searchedString : ""))
 
+    /**
+     * Called everytime when page number param gets updated to set the page Number
+     */
     useEffect(() => {
         setPage(parseInt(pageParam));
     }, [pageParam])
 
+    /**
+     * Search character
+     */
     useEffect(() => {
         if (!searchedString) return;
         if (searchedString) searchCharacters();
@@ -64,6 +70,9 @@ function HomePage() {
         }
     }, [searchedString, data, searchCharacters, page])
 
+    /**
+     * List all the characters
+     */
     useEffect(() => {
         if (!searchedString) {
             loadCharacters();
@@ -77,6 +86,12 @@ function HomePage() {
     if (loading || loadingAllChars) return <div className={classes.loading}>Loading....</div>
     if (error || AllCharsError) return <NotFound message="Some error occured!! Try searching with different name!"/>
 
+    /**
+     * Set page number
+     * Update route on the basis of searchedString
+     * @param event: event 
+     * @param {Number} value: pageNumber
+     */
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
         if (searchedString) history.push(`/page/${value}/search?q=${searchedString}`)
@@ -105,7 +120,6 @@ function HomePage() {
                     ))}
                 </Grid>
             </Grid>
-
             {pageInfo && 
                 <Pagination 
                     defaultPage={1}
@@ -117,10 +131,7 @@ function HomePage() {
                     className={classes.pagination}
                 ></Pagination>
             }
-           
            <Button className={classes.btn} variant="contained">Click here to visit last 10 visited profiles</Button>
-
-            
         </div>
     )
 }
