@@ -1,6 +1,7 @@
 import { CardActions, CardHeader, CardMedia, IconButton, makeStyles } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -63,6 +64,10 @@ function CharacterCard(props: any) {
 
     const classes = useStyles();
     const history = useHistory();
+
+    useEffect(() => {
+        document.title="Rick n Morty Directory"
+    })
 
     /**
      * Redirects user to character detail page

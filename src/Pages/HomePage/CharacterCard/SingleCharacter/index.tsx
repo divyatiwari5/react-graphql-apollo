@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import { CardActions, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Typography } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
+import { useMemo, useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import Header from '../../../../Components/Header';
 import NotFound from '../../../../Components/NotFound';
@@ -88,14 +89,31 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+interface IDetailedData{
+    name: string,
+    image: string,
+    status: string,
+    type: string,
+    location: {
+        name: string
+    },
+    gender: string,
+    species: string
+}
+
 function SingleCharacter() {
 
     const classes = useStyles();
     const history = useHistory();
+    const [detailedData, setDetails] = useState<IDetailedData|undefined>(undefined);
 
     let { slug } = useParams<{slug: string}>();
 
     const characterId = slug.split("-")[0];
+
+    useEffect(() => {
+        document.title= detailedData ? detailedData.name : "Detail Page"
+    }, [detailedData]);
 
     /**
      * Calling GET_CHARACTER_DETAILS Query to get the character detail
@@ -124,14 +142,17 @@ function SingleCharacter() {
         }
     }
 
-
-    let detailedData;
+    /**
+     * It's a hack to stop re-rendering of the component in infinite loop
+     * TODO: Think of a better solution
+     */
+    useMemo(() => {
+        setDetails(data?.character);
+    }, [data])
 
     if (loading) return <div className={classes.loading}>Loading Details...</div>
     if (error) return <NotFound message="Some error occurred!"/>
-    if (data) detailedData = data.character;
     if (!detailedData) return <NotFound message="Data not found"/>
-
 
     return (
         <div>
