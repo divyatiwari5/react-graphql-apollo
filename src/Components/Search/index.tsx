@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import * as _ from "lodash";
 import { useEffect } from 'react';
 import { Button } from '@material-ui/core';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory, withRouter } from 'react-router-dom';
 
 function Search(props: any) {
 
+    const history = useHistory();
     const query = new URLSearchParams(props.location.search);
     const searchedString = query.get("q");
 
@@ -20,6 +21,12 @@ function Search(props: any) {
         setSearchString(event.target.value)
     }
 
+    const handleKeyPress = (event: React.KeyboardEvent) => {
+        if (event.key === "Enter") {
+            history.push(`/page/1/search?q=${searchString}`)
+        }
+    }
+
     return(
         <div className="search-person">
             <SearchIcon/>
@@ -28,6 +35,7 @@ function Search(props: any) {
                 placeholder="Search character..."
                 value={searchString}
                 onChange={(event) => handleOnChange(event)}
+                onKeyPress={(event) => handleKeyPress(event)}
             />
             <Link to={`/page/1/search?q=${searchString}`}>
                 <Button variant="contained" color="primary">Search</Button>
