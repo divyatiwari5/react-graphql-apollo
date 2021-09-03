@@ -30,9 +30,9 @@ export const GET_CHARACTERS = (page = 1, searchString = "") => gql`
  * @param characterId: ID of character
  * @returns 
  */
-export const GET_CHARACTER_DETAILS = (characterId: number) => gql`
-    query {
-        charactersByIds( ids: ${characterId}) {
+export const GET_CHARACTER_DETAILS = gql`
+    query GetCharacterById($characterId: ID!) {
+      character(id: $characterId) {
             name,
             id,
             status,

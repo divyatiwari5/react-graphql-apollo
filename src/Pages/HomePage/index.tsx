@@ -1,5 +1,5 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Button, Grid, makeStyles } from "@material-ui/core";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -7,6 +7,7 @@ import CharacterCard from "./CharacterCard";
 import Pagination from '@material-ui/lab/Pagination';
 import { GET_CHARACTERS } from "../../GQueries";
 import Header from "../../Components/Header";
+import NotFound from "../../Components/NotFound";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -17,6 +18,14 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         marginBottom: 20
+    },
+    btn: {
+        display: 'flex',
+        margin: 'auto'
+    },
+    loading: {
+        textAlign: 'center',
+        padding: '250px 0'
     }
 }));
 
@@ -34,6 +43,7 @@ function HomePage() {
     const classes = useStyles();
     const [page, setPage] = useState(1);
     const [results, setResults] = useState([])
+
 
     const [ loadCharacters, {loading: loadingAllChars, error: AllCharsError, data: allChars} ]= useLazyQuery(GET_CHARACTERS(page, ""));
 
@@ -64,11 +74,8 @@ function HomePage() {
         }
     }, [allChars, loadCharacters, searchedString, page])
 
-    if (loading || loadingAllChars) return <div>Loading....</div>
-    if (error || AllCharsError) return <div>Error...</div>
-    // if (!allChars) return <div>No data found!</div>
-
-    // if (allChars && allChars?.characters?.results) finalResult = allChars.characters.results;
+    if (loading || loadingAllChars) return <div className={classes.loading}>Loading....</div>
+    if (error || AllCharsError) return <NotFound message="Some error occured!! Try searching with different name!"/>
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -111,6 +118,8 @@ function HomePage() {
                 ></Pagination>
             }
            
+           <Button className={classes.btn} variant="contained">Click here to visit last 10 visited profiles</Button>
+
             
         </div>
     )

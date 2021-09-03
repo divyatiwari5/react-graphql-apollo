@@ -27,6 +27,8 @@
         background: transparent;
         font-size: 14px;
         margin-left: 15px;
+        height: inherit;
+        width: 68%;
         &:focus-visible {
             outline: none;
         }

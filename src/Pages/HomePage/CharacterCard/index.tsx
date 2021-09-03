@@ -92,9 +92,7 @@ function CharacterCard(props: any) {
                             />
                              <div className={getClassName(props.status)}></div>
                         </div>
-                        
                         }
-                    
                     title={props.name}
             />
             <CardActions className={classes.cardAction}>

@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import { useHistory, useParams } from 'react-router-dom';
 import Header from '../../../../Components/Header';
+import NotFound from '../../../../Components/NotFound';
 import { GET_CHARACTER_DETAILS } from '../../../../GQueries';
 
 const useStyles = makeStyles((theme) => ({
@@ -80,9 +81,12 @@ const useStyles = makeStyles((theme) => ({
     tooLong: {
         wordSpacing: 30,
         width: 60
+    },
+    loading: {
+        textAlign: 'center',
+        padding: '250px 0'
     }
-
-}))
+}));
 
 interface ParamTypes {
     characterId: string
@@ -93,9 +97,12 @@ function SingleCharacter() {
     const classes = useStyles();
     const history = useHistory();
 
-    let { characterId } = useParams<ParamTypes>();
+    let { characterId } = useParams<{characterId: string}>();
+    const { loading, error, data  } = useQuery(
+        GET_CHARACTER_DETAILS, { variables: { characterId: parseInt(characterId)}}
+    );
 
-    const { loading, data, error } = useQuery(GET_CHARACTER_DETAILS(parseInt(characterId)));
+    console.log({characterId}, {loading}, {error}, {data});
 
     function onClickHandle(){
         history.push("/");
@@ -115,10 +122,11 @@ function SingleCharacter() {
 
     let detailedData;
 
-    if (loading) return <div>Loading Details...</div>
-    if (error) return <div>Error...</div>
-    if (data) detailedData = data.charactersByIds[0];
-    if (!detailedData) return <div>No data found</div>
+
+    if (loading) return <div className={classes.loading}>Loading Details...</div>
+    if (error) return <NotFound message="Some error occurred!"/>
+    if (data) detailedData = data.character;
+    if (!detailedData) return <NotFound message="Data not found"/>
 
 
     return (
