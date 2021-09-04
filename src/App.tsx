@@ -6,7 +6,7 @@ export default function App() {
 	return (
 		<BrowserRouter>
 			<Switch>
-				<Route path="/page/:pageNumber">
+				<Route path="/page/:pageRef">
 					<HomePage/>
 				</Route>
 				<Route path="/profile/:slug">

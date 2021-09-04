@@ -3,6 +3,7 @@ import Card from '@material-ui/core/Card';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
+import { addRecentCharacter } from '../../queries/reactive';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -69,8 +70,8 @@ function CharacterDetailCard(props: any) {
     const history = useHistory();
 
     useEffect(() => {
-        document.title="Rick n Morty Directory"
-    })
+        addRecentCharacter(props.id);
+    }, [props.id])
 
     function onClickHandle(){
         history.push("/");

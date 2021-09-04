@@ -1,11 +1,12 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { Button, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import CharacterCard from './CharacterCard';
 import Pagination from '@material-ui/lab/Pagination';
-import { GET_CHARACTERS } from '../../queries';
+import { GET_CHARACTERS, GET_CHARACTERS_BY_IDS } from '../../queries';
 import { Header, NotFound } from '../../commons';
+import { RECENT_CHARACTERS } from '../../queries/reactive';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -27,70 +28,59 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ParamTypes {
-    pageNumber: string
+    pageRef: string
 }
 
 function HomePage() {
     const history = useHistory();
-
+    let errorMessage = "Some error occurred!! Try searching with different name!";
     const query = new URLSearchParams(history.location.search);
     const searchedString = query.get("q");
-    const { pageNumber: pageParam } = useParams<ParamTypes>();
+    const { pageRef } = useParams<ParamTypes>();
+    let pageNumber = parseInt(pageRef);
+    if (!pageNumber && pageRef === "recent") {
+        errorMessage = "No recent characters visited."
+    }
+    else if (!pageNumber) {
+        errorMessage = "Invalid Page Number provided."
+    }
 
     const classes = useStyles();
-    const [page, setPage] = useState(1);
+    const recentCharacters: Array<number> = useReactiveVar(RECENT_CHARACTERS);
+
+    const [showError, setShowError] = useState<boolean>(false);
     const [results, setResults] = useState([])
-
-
-    const [
-        loadCharacters,
-        {loading: loadingAllChars, error: AllCharsError, data: allChars}
-    ] = useLazyQuery(
-        GET_CHARACTERS,
-        { variables: {page, searchString: ""} }
-    );
 
     const [pageInfo, setPageInfo] = useState({count: 0, pages: 0, next: 0, prev: 0})
 
     const [ searchCharacters, { loading, error, data }] = useLazyQuery(
         GET_CHARACTERS,
-        {variables: {page, searchString: searchedString ? searchedString : ""}}
+        {variables: {page: pageNumber || 1, searchString: searchedString ? searchedString : ""}}
     );
 
-    /**
-     * Called everytime when page number param gets updated to set the page Number
-     */
-    useEffect(() => {
-        setPage(parseInt(pageParam));
-    }, [pageParam])
+    const [ getRecentCharacters, { loading: loadingRecent, error: errorRecent, data: dataRecent }] = useLazyQuery(
+        GET_CHARACTERS_BY_IDS,
+        {variables: {characterIds: recentCharacters}}
+    );
 
     /**
      * Search character
      */
     useEffect(() => {
-        if (!searchedString) return;
-        if (searchedString) searchCharacters();
-        if (data) {
-            setResults(data.characters.results);
-            setPageInfo(data.characters.info);
-        }
-    }, [searchedString, data, searchCharacters, page])
+        console.log({pageRef}, {pageNumber})
+        setShowError(false);
+        if (pageNumber) searchCharacters();
+        else if (pageRef === "recent" && recentCharacters.length > 0) getRecentCharacters();
+        else setShowError(true);
+        let showData = (pageNumber && data && data.characters.results) || (dataRecent && dataRecent.charactersByIds);
+        let paginationInfo = (pageNumber && data && data.characters.info);
+        console.log({showData});
+        if (showData) setResults(showData);
+        if (paginationInfo) setPageInfo(paginationInfo);
+    }, [getRecentCharacters, searchedString, recentCharacters, data, dataRecent, pageNumber, pageRef, searchCharacters])
 
-    /**
-     * List all the characters
-     */
-    useEffect(() => {
-        if (!searchedString) {
-            loadCharacters();
-        }
-        if (allChars) {
-            setResults(allChars.characters.results);
-            setPageInfo(allChars.characters.info);
-        }
-    }, [allChars, loadCharacters, searchedString, page])
-
-    if (loading || loadingAllChars) return <div className={classes.loading}>Loading....</div>
-    if (error || AllCharsError) return <NotFound message="Some error occured!! Try searching with different name!"/>
+    if (loading || loadingRecent) return <div className={classes.loading}>Loading....</div>
+    if (showError || error || errorRecent) return <NotFound message={errorMessage}/>
 
     /**
      * Set page number
@@ -99,11 +89,9 @@ function HomePage() {
      * @param {Number} value: pageNumber
      */
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
         if (searchedString) history.push(`/page/${value}/search?q=${searchedString}`)
         else history.push(`/page/${value}`)
     }
-
     return(        
         <div>
             <Header/>
@@ -126,18 +114,24 @@ function HomePage() {
                     ))}
                 </Grid>
             </Grid>
-            {pageInfo && 
+            {(pageInfo && pageNumber)
+                ?
                 <Pagination 
                     defaultPage={1}
-                    page={page}
+                    page={pageNumber}
                     count={pageInfo['pages']}
                     variant="outlined"
                     shape="rounded"
                     onChange={handlePageChange}
                     className={classes.pagination}
                 ></Pagination>
+                : ""
             }
-           <Button className={classes.btn} variant="contained">Click here to visit last 10 visited profiles</Button>
+            {
+                (recentCharacters.length > 0) ?
+                <Button className={classes.btn} variant="contained" onClick={() => history.push("/page/recent")}>Click here to visit last 10 visited profiles</Button>
+                : ""
+            }
         </div>
     )
 }

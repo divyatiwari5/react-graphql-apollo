@@ -23,7 +23,7 @@ export const GET_CHARACTERS = gql`
       }
   }
 }
-`
+`;
 
 /**
  * Get details of a character
@@ -33,16 +33,27 @@ export const GET_CHARACTERS = gql`
 export const GET_CHARACTER_DETAILS = gql`
     query GetCharacterById($characterId: ID!) {
       character(id: $characterId) {
-            name,
-            id,
-            status,
-            species,
-            image,
-            type,
-            gender,
-            location {
+		  name,
+		  id,
+		  status,
+		  species,
+		  image,
+		  type,
+		  gender,
+          location {
             name
-            }
+          }
         }
     }
-`
+`;
+
+export const GET_CHARACTERS_BY_IDS = gql`
+    query GetCharacterByIds($characterIds: [ID!]!) {
+      charactersByIds(ids: $characterIds) {
+		  name,
+		  id,
+		  status,
+		  image,
+        }
+    }
+`;

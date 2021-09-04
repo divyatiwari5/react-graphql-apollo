@@ -6,11 +6,11 @@ import './Styles/styles.scss';
 
 import './style.scss';
 
-const cache = new InMemoryCache()
+const cache = new InMemoryCache();
 
 const client = new ApolloClient({
 	uri: 'https://rickandmortyapi.com/graphql',
-	cache,
+	cache
 });
 
 ReactDOM.render(
