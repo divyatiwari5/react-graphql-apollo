@@ -1,6 +1,6 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import HomePage from './Pages/HomePage';
-import SingleCharacter from './Pages/HomePage/CharacterCard/SingleCharacter';
+import { CharacterDetail } from './characterDetail';
+import { HomePage } from './homePage';
 
 export default function App() {
 	return (
@@ -10,7 +10,7 @@ export default function App() {
 					<HomePage/>
 				</Route>
 				<Route path="/profile/:slug">
-					<SingleCharacter/>
+					<CharacterDetail/>
 				</Route>
 				<Route path="/">
 					<Redirect to="/page/1"/> 

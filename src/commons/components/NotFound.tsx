@@ -2,10 +2,10 @@
  * Call this component in case of Error or when there is no data
  */
 
-import { Typography } from "@material-ui/core";
-import Header from "../Header";
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { useEffect } from "react";
+import { Typography } from '@material-ui/core';
+import { Header } from './Header';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,4 +32,4 @@ function NotFound(props: {message: string}) {
     )
 }
 
-export default NotFound
+export { NotFound }

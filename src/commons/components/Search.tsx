@@ -2,13 +2,11 @@
  * Search component enables character searching
  */
 import SearchIcon from '@material-ui/icons/Search';
-import React, { useState } from 'react';
-import * as _ from "lodash";
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import { Link, useHistory, withRouter } from 'react-router-dom';
 
-function Search(props: any) {
+function SearchComponent(props: any) {
 
     const history = useHistory();
     const query = new URLSearchParams(props.location.search);
@@ -18,7 +16,7 @@ function Search(props: any) {
 
     useEffect(() => {
         if(searchedString) setSearchString(searchedString);
-    }, [])
+    }, [searchedString])
 
     /**
      * set input value on change of search input value
@@ -55,4 +53,6 @@ function Search(props: any) {
     )
 }
 
-export default withRouter(Search)
+const Search = withRouter(SearchComponent)
+
+export { Search }

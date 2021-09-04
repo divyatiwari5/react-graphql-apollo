@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import "./Styles/styles.scss";
+import './Styles/styles.scss';
 
 import './style.scss';
 

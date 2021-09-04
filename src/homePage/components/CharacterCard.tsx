@@ -87,12 +87,13 @@ function CharacterCard(props: any) {
     function getClassName(status: string) {
         let className = classes.status + ' ';
         if(status === "Alive") {
-            return className += classes.alive
+            className += classes.alive;
         } else if(status === "Dead") {
-            return className += classes.dead
+            className += classes.dead;
         } else if(status === "unknown") {
-            return className += classes.unknown
+            className += classes.unknown;
         }
+        return className;
     }
 
     return (

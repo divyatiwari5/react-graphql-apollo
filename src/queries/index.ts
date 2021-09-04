@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 /**
  * List all characters that satisfy the criteria with pagination
@@ -6,9 +6,9 @@ import { gql } from "@apollo/client";
  * @param searchString default is empty string 
  * @returns 
  */
-export const GET_CHARACTERS = (page = 1, searchString = "") => gql`
-  query {
-      characters(page: ${page}, filter: { name: "${searchString}" }) {
+export const GET_CHARACTERS = gql`
+  query GetCharacters($page: Int!, $searchString: String!){
+      characters(page: $page, filter: { name: $searchString }) {
     info {
       count,
       pages,

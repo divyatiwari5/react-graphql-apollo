@@ -1,14 +1,11 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { Button, Grid, makeStyles } from "@material-ui/core";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import CharacterCard from "./CharacterCard";
+import { useLazyQuery } from '@apollo/client';
+import { Button, Grid, makeStyles } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import CharacterCard from './CharacterCard';
 import Pagination from '@material-ui/lab/Pagination';
-import { GET_CHARACTERS } from "../../GQueries";
-import Header from "../../Components/Header";
-import NotFound from "../../Components/NotFound";
-
+import { GET_CHARACTERS } from '../../queries';
+import { Header, NotFound } from '../../commons';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -45,11 +42,20 @@ function HomePage() {
     const [results, setResults] = useState([])
 
 
-    const [ loadCharacters, {loading: loadingAllChars, error: AllCharsError, data: allChars} ]= useLazyQuery(GET_CHARACTERS(page, ""));
+    const [
+        loadCharacters,
+        {loading: loadingAllChars, error: AllCharsError, data: allChars}
+    ] = useLazyQuery(
+        GET_CHARACTERS,
+        { variables: {page, searchString: ""} }
+    );
 
     const [pageInfo, setPageInfo] = useState({count: 0, pages: 0, next: 0, prev: 0})
 
-    const [ searchCharacters, { loading, error, data }] = useLazyQuery(GET_CHARACTERS(page, searchedString ? searchedString : ""))
+    const [ searchCharacters, { loading, error, data }] = useLazyQuery(
+        GET_CHARACTERS,
+        {variables: {page, searchString: searchedString ? searchedString : ""}}
+    );
 
     /**
      * Called everytime when page number param gets updated to set the page Number
@@ -136,4 +142,4 @@ function HomePage() {
     )
 }
 
-export default HomePage
+export { HomePage }
