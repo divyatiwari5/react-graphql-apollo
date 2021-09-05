@@ -58,15 +58,69 @@ const mocks = [
 	}
 ];
 
-test('renders without error', async () => {
-	renderWithRouter(
-		<MockedProvider mocks={mocks} addTypename={false}>
-			<CharacterDetail />
-		</MockedProvider>,
-		{route: "/profile/1-random-stuff", path: "/profile/:slug"}
-	);
+describe('Loading state', () => {
+	test('can show loader', async () => {
+		renderWithRouter(
+			<MockedProvider mocks={mocks} addTypename={false}>
+				<CharacterDetail />
+			</MockedProvider>,
+			{route: "/profile/1-random-stuff", path: "/profile/:slug"}
+		);
+	
+		const loadingContainer = await document.querySelector('#loading-details');
+		expect(loadingContainer).toBeInTheDocument()
+		expect(loadingContainer).toHaveTextContent("Loading Details...")
+	});
+})
 
+describe('Given an invalid character id', () => {
+	test('invalid id throws error', async () => {
+		renderWithRouter(
+			<MockedProvider mocks={mocks} addTypename={false}>
+				<CharacterDetail />
+			</MockedProvider>,
+			{route: "/profile/30-random-stuff", path: "/profile/:slug"}
+		);
 	await new Promise(resolve => setTimeout(resolve, 0));
-	const container = await screen.findByTestId("CharacterCardContainer")
-	console.log(container);
-});
+
+	const errorContainer = await screen.getByTestId('not-found-section');
+	expect(errorContainer).toBeInTheDocument()	
+	})
+}) 
+
+
+describe('Given a valid character id', () => {
+	test('can show character details', async () => {
+		renderWithRouter(
+			<MockedProvider mocks={mocks} addTypename={false}>
+				<CharacterDetail />
+			</MockedProvider>,
+			{route: "/profile/1-random-stuff", path: "/profile/:slug"}
+		);
+	
+		await new Promise(resolve => setTimeout(resolve, 0));
+		const container = await screen.getByTestId("CharacterCardContainer")
+		expect(container).toBeInTheDocument()
+		expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
+		expect(screen.getByText('Alive')).toBeInTheDocument()
+		expect(screen.getByText('Human')).toBeInTheDocument()
+		expect(screen.getByText('Male')).toBeInTheDocument()
+		expect(screen.getByText('Location')).toBeInTheDocument()
+		expect(screen.getByText('Earth (Replacement Dimension)')).toBeInTheDocument()
+	});
+
+	test('can show color as per the status', async () => {
+		renderWithRouter(
+			<MockedProvider mocks={mocks} addTypename={false}>
+				<CharacterDetail />
+			</MockedProvider>,
+			{route: "/profile/1-random-stuff", path: "/profile/:slug"}
+		);
+	
+		await new Promise(resolve => setTimeout(resolve, 0));
+		const style = await screen.getByTestId("characterStatusColor");
+		expect(style).toHaveStyle(`background: green`)
+	})
+	
+})
+

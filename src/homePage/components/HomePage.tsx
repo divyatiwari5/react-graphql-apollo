@@ -116,7 +116,7 @@ function HomePage() {
             </Grid>
             {(pageInfo && pageNumber)
                 ?
-                <Pagination 
+                <Pagination
                     defaultPage={1}
                     page={pageNumber}
                     count={pageInfo['pages']}
@@ -124,7 +124,7 @@ function HomePage() {
                     shape="rounded"
                     onChange={handlePageChange}
                     className={classes.pagination}
-                ></Pagination>
+                />
                 : ""
             }
             {

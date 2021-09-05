@@ -104,7 +104,7 @@ function CharacterDetailCard(props: any) {
                             className={classes.cover}
                             image={props.image}
                         />
-                        <div className={getClassName(props.status)}></div>
+                        <div className={getClassName(props.status)} data-testid="characterStatusColor"></div>
                     </div>
                 }
                 title={props.name}

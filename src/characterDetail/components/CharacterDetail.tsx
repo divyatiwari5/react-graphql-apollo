@@ -53,7 +53,7 @@ export function CharacterDetail() {
         setDetails(data?.character);
     }, [data])
 
-    if (loading) return <div className={classes.loading}>Loading Details...</div>
+    if (loading) return <div className={classes.loading} id="loading-details">Loading Details...</div>
     if (error) return <NotFound message="Some error occurred!"/>
     if (!detailedData) return <NotFound message="Data not found"/>
 

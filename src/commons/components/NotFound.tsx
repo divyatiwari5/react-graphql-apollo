@@ -25,7 +25,7 @@ function NotFound(props: {message: string}) {
     }, [])
 
     return(
-        <div>
+        <div data-testid="not-found-section">
             <Header/>
             <Typography variant="h6" className={classes.root}>{props.message}</Typography>
         </div>
