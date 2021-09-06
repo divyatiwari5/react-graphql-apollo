@@ -17,6 +17,7 @@
 - [x] Autocomplete search
 - [ ] 100% test coverage
 - [ ] Handle bug in slug url. Eg. `/profile/1-random-data` This will find data for character id `1`, irrespective of the name written after it
+- [ ] Handle pagination in autocomplete search
 - [ ] Improvise UI/UX
 
 ### App Structure
