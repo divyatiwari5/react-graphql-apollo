@@ -112,3 +112,12 @@ Of course, given the time constraint we do not expect any of these tasks to be c
 -   Set page title for each different page
 -   Submit the search form when the user presses the `Enter` key
 -   E2E tests (we use [Cypress](https://www.cypress.io/))
+
+### Implementation
+
+---
+
+Find the implementation guide here:
+[IMPLEMENTATION.md](https://github.com/entyre-hire/react-exercise-divyatiwari5/blob/feature/characters-page/IMPLEMENTATION.md)
+
+for more details
