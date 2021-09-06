@@ -21,7 +21,8 @@
 
 ### App Structure
 
-- `src`: Contains all source code
+- `src`: Contains all pages as modules. Each module contains `components` which contains component specific to that module. Any component that's to be used by multiple modules is written inside `common/components`. To reduce the complexity of import, all exportable of each module is exported in `module/index.ts`
+
    - `commons`: contains common components
      - `index.ts`: export all the common components at root level
      - `components`: contains common components
