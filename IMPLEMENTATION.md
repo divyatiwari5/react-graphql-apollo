@@ -1,7 +1,5 @@
 ## App structure and Features
 
----
-
 ### Features and Future Scope
 - [x] List 20 characters at a time with Pagination
 - [x] Available information of a character: name, image and status
@@ -45,8 +43,6 @@
 
 ## Tests with `jest`
 
----
-
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
@@ -66,14 +62,12 @@ In the project directory
 
 ## Running React App
 
----
-
 In the project directory, you can run
 
-## `npm install` or `yarn install`
+### `npm install` or `yarn install`
 It will install all the required packages
 
-## `npm start` or `yarn start`
+### `npm start` or `yarn start`
 Runs the app in development mode
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
