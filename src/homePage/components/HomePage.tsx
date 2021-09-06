@@ -67,14 +67,12 @@ function HomePage() {
      * Search character
      */
     useEffect(() => {
-        console.log({pageRef}, {pageNumber})
         setShowError(false);
         if (pageNumber) searchCharacters();
         else if (pageRef === "recent" && recentCharacters.length > 0) getRecentCharacters();
         else setShowError(true);
         let showData = (pageNumber && data && data.characters.results) || (dataRecent && dataRecent.charactersByIds);
         let paginationInfo = (pageNumber && data && data.characters.info);
-        console.log({showData});
         if (showData) setResults(showData);
         if (paginationInfo) setPageInfo(paginationInfo);
     }, [getRecentCharacters, searchedString, recentCharacters, data, dataRecent, pageNumber, pageRef, searchCharacters])
